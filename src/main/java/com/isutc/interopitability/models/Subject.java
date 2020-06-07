@@ -1,23 +1,28 @@
 package com.isutc.interopitability.models;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Institution {
+public class Subject {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	private long id;
 	private String name;
-	private LocalDateTime dateEntry;
-
+	private String mark;
+	@ManyToOne
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public long getId() {
 		return id;
 	}
@@ -30,16 +35,11 @@ public class Institution {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public LocalDateTime getDateEntry() {
-		return dateEntry;
+	public String getMark() {
+		return mark;
 	}
-	public void setDateEntry(LocalDateTime dateEntry) {
-		this.dateEntry = dateEntry;
+	public void setMark(String mark) {
+		this.mark = mark;
 	}
-	
-	
-	
 	
 }
-                      
-

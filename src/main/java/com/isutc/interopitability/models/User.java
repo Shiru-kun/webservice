@@ -14,28 +14,32 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	private String name;
-	private String bi;
+	private Result name;
+	private Result bi;
 	@Enumerated
 	private Result result; 
 	@ManyToOne
 	private Institution institution;
+	
+
+	
+	
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getName() {
+	public Result getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(Result name) {
 		this.name = name;
 	}
-	public String getBi() {
+	public Result getBi() {
 		return bi;
 	}
-	public void setBi(String bi) {
+	public void setBi(Result bi) {
 		this.bi = bi;
 	}
 	public Result getResult() {

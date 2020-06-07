@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isutc.interopitability.beans.Response;
 import com.isutc.interopitability.modelEnum.Status;
 import com.isutc.interopitability.models.Institution;
 import com.isutc.interopitability.models.WebServiceHistory;
@@ -23,52 +26,49 @@ public class WebServiceController {
 
 	@Autowired
 	private LogService logService;
+
 	@GetMapping("/institution")
 	public @ResponseBody ResponseEntity<?> getInstitutionList() {
-     
-		//teste purpose
-		
-//		Institution institution= new Institution();
-//      institution.setName("ISUTC");
-//      
-//       System.err.println(insService.save(institution));
+
+		// test purpose
+
+		Institution institution= new Institution();
+      institution.setName("Up");
+       System.err.println(insService.save(institution));
 		return new ResponseEntity<>(insService.findAll(), HttpStatus.ACCEPTED);
 	}
 
 	@PostMapping("requestInfo")
-	public @ResponseBody ResponseEntity<?> requestInfo(@RequestParam("name") String name, @RequestParam("bi") String bi,
+	public  String requestInfo(@RequestParam("name") String name, @RequestParam("bi") String bi,
 			@RequestParam("instCod") String instCod, @RequestParam("reqDoc") String reqDoc) {
+		String redirect = "redirect:/";
+		long instCodReq = 1;
+		long instCodResp = 1;
+		WebServiceHistory log = new WebServiceHistory(instCodReq, instCodResp, Status.Sending, reqDoc);
+		boolean isSavedLog = logService.save(log);
+System.err.println(isSavedLog);
+		redirect += "forwardRequest/{" + instCodReq + "}/{" + instCodResp + "}/{" + reqDoc + "}/{" + bi+"}";
 
-		long loggedId  = 1; 
-		long RequestedId  = 1; 
-		WebServiceHistory log = new WebServiceHistory(loggedId, RequestedId, Status.Sending, reqDoc);
-		 boolean isSavedLog = logService.save(log); 
-		
-		
-		return new ResponseEntity<>(isSavedLog, HttpStatus.ACCEPTED);
+		return redirect;
 	}
+
 	
-	@PostMapping("responseInfo")
-	public @ResponseBody ResponseEntity<?> response(@RequestParam("name") String name, @RequestParam("bi") String bi,
-			@RequestParam("instCod") String instCod, @RequestParam("reqDoc") String reqDoc) {
-
-		long loggedId  = 1; 
-		long RequestedId  = 1; 
-		WebServiceHistory log = new WebServiceHistory(loggedId, RequestedId, Status.Sending, reqDoc);
-		 boolean isSavedLog = logService.save(log); 
+	@RequestMapping(value= "/responseRequest/{instCodReq}/{instCodResp}/{infoName}/{result}/{observation}")
+	public @ResponseBody ResponseEntity<?> responseInfo(@PathVariable("instCodReq") long instCodReq, 
+			@PathVariable("instCodResp") long instCodResp, @PathVariable("infoName") String infoName, @PathVariable("result") String result, @PathVariable("observation") String observation ){
 		
 		
-		return new ResponseEntity<>(isSavedLog, HttpStatus.ACCEPTED);
+		Response response = new Response() ;
+		
+		response.setCodInstReq(insService.findById(instCodReq).getName());
+		response.setCodInstResp(insService.findById(instCodResp).getName());
+		response.setObs(observation);
+		response.setResult(result);
+		response.setInfoName(infoName);
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-//	
-//	
-//	@RequestMapping
-//	public @ResponseBody ResponseEntity<?> answerInfoRequest(){
-//		
-//		return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
-//	} 
-//	
-//	//methodToForwardRequest 
-//	
-//	
+
+	
+
 }
