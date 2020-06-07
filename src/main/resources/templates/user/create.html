@@ -17,7 +17,7 @@ ul#list li {
 </style>
 </head>
 
-<body class="">
+<body class=""  onload ="showSuportedInstitutions()">
 	<div class="wrapper ">
 
 		<th:block th:replace="sidebar"></th:block>
@@ -60,9 +60,9 @@ ul#list li {
 											</div>
 
 											<div class="form-group">
-												<select class="form-control" >
-													<option id="instCod">ISUTC</option>
-													<option>UEM</option>
+												<select  class="form-control" id="instCod" >
+													<option id=""></option>
+											
 												</select>
 											</div>
 											<div class="form-group">
@@ -227,8 +227,26 @@ function sendRequest(){
 
 		 });
 	}
-		/*
-		 */
+		
+		 function showSuportedInstitutions() {
+			 var option = '';
+			 const instCod = document.getElementById("instCod"); 
+				$.ajax({
+					type : "GET",
+					url : "/institution",
+					success : function(result) {
+						for (i = 0; i < result.length; i++) {
+						option += '<option value="'+result[i].id+'">'
+									+ result[i].name + '</option>';
+ 							$('#instCod').html(option);
+console.log(result[i].name);
+						}
+						
+					}
+
+				});
+
+			}
 	</script>
 
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isutc.interopitability.modelEnum.Status;
+import com.isutc.interopitability.models.Institution;
 import com.isutc.interopitability.models.WebServiceHistory;
 import com.isutc.interopitability.services.InstitutionService;
 import com.isutc.interopitability.services.LogService;
@@ -24,7 +25,13 @@ public class WebServiceController {
 	private LogService logService;
 	@GetMapping("/institution")
 	public @ResponseBody ResponseEntity<?> getInstitutionList() {
-
+     
+		//teste purpose
+		
+//		Institution institution= new Institution();
+//      institution.setName("ISUTC");
+//      
+//       System.err.println(insService.save(institution));
 		return new ResponseEntity<>(insService.findAll(), HttpStatus.ACCEPTED);
 	}
 
